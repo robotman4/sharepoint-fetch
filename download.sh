@@ -12,7 +12,7 @@ sharepoint_url="example.sharepoint.com"
 file_name="filename.txt"
 destination="/tmp/" # Where to save the file
 
-echo Create login
+echo Fetch access token
 response_access=$(curl -s -X POST \
     "https://login.microsoftonline.com/$tenant_id/oauth2/v2.0/token" \
     -F grant_type=client_credentials \
@@ -43,6 +43,7 @@ response_folder=$(curl -s -X GET \
 
 folder_id=$(echo $response_folder | jq -r '.value[] | select(.name=="General") | .id')
 
+echo Fetch item id
 response_item=$(curl -s -X GET \
     "https://graph.microsoft.com/v1.0/sites/$site_id/drives/$drive_id/items/$folder_id/children" \
     -H "Authorization: Bearer $access_token")
